@@ -7,22 +7,22 @@ import (
 )
 
 type TransactionType string
-type Transactions []transaction
+type Transactions []Transaction
 
 const (
 	DebitTransaction  TransactionType = "debit"
 	CreditTransaction TransactionType = "credit"
 )
 
-type transaction struct {
+type Transaction struct {
 	Id            string          `json:"id"`
 	OperationType TransactionType `json:"type"` // type is a reserved word
 	Amount        uint64          `json:"amount"`
 	EffectiveDate time.Time       `json:"effective_date"`
 }
 
-func New(operationType TransactionType, amount uint64) *transaction {
-	return &transaction{
+func New(operationType TransactionType, amount uint64) Transaction {
+	return Transaction{
 		Id:            uuid.New().String(),
 		OperationType: operationType,
 		Amount:        amount,

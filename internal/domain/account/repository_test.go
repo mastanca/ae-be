@@ -21,7 +21,7 @@ func TestInMemoryRepositoryImpl_Get(t *testing.T) {
 func TestInMemoryRepositoryImpl_Save(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		repository := NewInMemoryRepositoryImpl()
-		transactions := transaction.Transactions{*transaction.New(transaction.DebitTransaction, 100)}
+		transactions := transaction.Transactions{transaction.New(transaction.DebitTransaction, 100)}
 		err := repository.Save(context.TODO(), Account{Transactions: transactions})
 		assert.NoError(t, err)
 	})
