@@ -9,16 +9,16 @@ import (
 func TestNewTransaction(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Run("create debit Transaction", func(t *testing.T) {
-			result := New(DebitTransaction, 100)
+			result := New(DebitTransaction, 100.0)
 			assert.Equal(t, DebitTransaction, result.OperationType)
-			assert.Equal(t, uint64(100), result.Amount)
+			assert.Equal(t, float64(100), result.Amount)
 			assert.NotEmpty(t, result.Id)
 			assert.NotNil(t, result.EffectiveDate)
 		})
 		t.Run("create credit Transaction", func(t *testing.T) {
-			result := New(CreditTransaction, 500)
+			result := New(CreditTransaction, 500.0)
 			assert.Equal(t, CreditTransaction, result.OperationType)
-			assert.Equal(t, uint64(500), result.Amount)
+			assert.Equal(t, float64(500), result.Amount)
 			assert.NotEmpty(t, result.Id)
 			assert.NotNil(t, result.EffectiveDate)
 		})

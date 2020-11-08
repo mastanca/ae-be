@@ -17,11 +17,11 @@ const (
 type Transaction struct {
 	Id            string          `json:"id"`
 	OperationType TransactionType `json:"type"` // type is a reserved word
-	Amount        uint64          `json:"amount"`
+	Amount        float64         `json:"amount"`
 	EffectiveDate time.Time       `json:"effective_date"`
 }
 
-func New(operationType TransactionType, amount uint64) Transaction {
+func New(operationType TransactionType, amount float64) Transaction {
 	return Transaction{
 		Id:            uuid.New().String(),
 		OperationType: operationType,

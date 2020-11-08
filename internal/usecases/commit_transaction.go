@@ -12,10 +12,10 @@ import (
 
 type CommitTransactionModel struct {
 	OperationType transaction.TransactionType `json:"type"`
-	Amount        uint64                      `json:"amount"`
+	Amount        float64                     `json:"amount"`
 }
 
-func NewCommitTransactionModel(operationType transaction.TransactionType, amount uint64) *CommitTransactionModel {
+func NewCommitTransactionModel(operationType transaction.TransactionType, amount float64) *CommitTransactionModel {
 	return &CommitTransactionModel{
 		OperationType: operationType,
 		Amount:        amount,
@@ -38,6 +38,11 @@ func (c commitTransactionImpl) Execute(ctx context.Context, model CommitTransact
 	if customerAccount == nil {
 		return nil, errors.New("nonexistent account")
 	}
+
+	if model.OperationType == transaction.DebitTransaction && customerAccount.GetBalance()-model.Amount < 0 {
+		return nil, &account.InvalidTransactionError{}
+	}
+
 	transactionToCommit := transaction.New(model.OperationType, model.Amount)
 	customerAccount.CommitTransaction(transactionToCommit)
 	err = c.repository.Save(ctx, *customerAccount)

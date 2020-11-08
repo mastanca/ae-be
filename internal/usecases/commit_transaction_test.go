@@ -15,7 +15,7 @@ import (
 
 func TestCommitTransactionImpl_Execute(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
-		model := NewCommitTransactionModel(transaction.CreditTransaction, 500)
+		model := NewCommitTransactionModel(transaction.CreditTransaction, 500.0)
 		t.Run("empty account", func(t *testing.T) {
 			repository := new(mocks.Repository)
 			defer repository.AssertExpectations(t)
@@ -31,13 +31,13 @@ func TestCommitTransactionImpl_Execute(t *testing.T) {
 			assert.NotNil(t, committedTransaction)
 			assert.Len(t, existingAccount.Transactions, 1)
 			assert.Equal(t, transaction.CreditTransaction, committedTransaction.OperationType)
-			assert.Equal(t, uint64(500), committedTransaction.Amount)
+			assert.Equal(t, float64(500), committedTransaction.Amount)
 		})
 		t.Run("preexistent account", func(t *testing.T) {
 			repository := new(mocks.Repository)
 			defer repository.AssertExpectations(t)
 
-			existingAccount := &account.Account{Transactions: transaction.Transactions{transaction.New(transaction.DebitTransaction, 100)}}
+			existingAccount := &account.Account{Transactions: transaction.Transactions{transaction.New(transaction.DebitTransaction, 100.0)}}
 			repository.On("Get", mock.Anything).Return(existingAccount, nil)
 			repository.On("Save", mock.Anything, mock.Anything).Return(nil)
 
@@ -48,7 +48,7 @@ func TestCommitTransactionImpl_Execute(t *testing.T) {
 			assert.NotNil(t, committedTransaction)
 			assert.Len(t, existingAccount.Transactions, 2)
 			assert.Equal(t, transaction.CreditTransaction, committedTransaction.OperationType)
-			assert.Equal(t, uint64(500), committedTransaction.Amount)
+			assert.Equal(t, float64(500), committedTransaction.Amount)
 		})
 	})
 	t.Run("Error", func(t *testing.T) {
@@ -91,6 +91,20 @@ func TestCommitTransactionImpl_Execute(t *testing.T) {
 			committedTransaction, err := commitTransaction.Execute(context.TODO(), *model)
 
 			assert.EqualError(t, err, "couldn't save account: fatal")
+			assert.Nil(t, committedTransaction)
+		})
+		t.Run("invalid debit operation", func(t *testing.T) {
+			model := NewCommitTransactionModel(transaction.DebitTransaction, 500)
+			repository := new(mocks.Repository)
+			defer repository.AssertExpectations(t)
+
+			existingAccount := &account.Account{Transactions: transaction.Transactions{transaction.New(transaction.CreditTransaction, 200)}}
+			repository.On("Get", mock.Anything).Return(existingAccount, nil)
+
+			commitTransaction := NewCommitTransactionImpl(repository)
+			committedTransaction, err := commitTransaction.Execute(context.TODO(), *model)
+
+			assert.True(t, errors.Is(err, &account.InvalidTransactionError{}))
 			assert.Nil(t, committedTransaction)
 		})
 	})
