@@ -28,7 +28,7 @@ func (ch commitTransactionHandlerImpl) Handle(c *gin.Context) {
 	committedTransaction, err := ch.commitTransaction.Execute(c, *usecases.NewCommitTransactionModel(newTransaction.OperationType, newTransaction.Amount))
 	if err != nil {
 		if errors.Is(err, &account.InvalidTransactionError{}) {
-			_ = c.AbortWithError(http.StatusConflict, err)
+			c.AbortWithStatusJSON(http.StatusConflict, gin.H{"reason": err.Error()})
 			return
 		}
 		_ = c.AbortWithError(http.StatusInternalServerError, err)
