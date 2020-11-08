@@ -1,4 +1,4 @@
-package domain
+package transaction
 
 import (
 	"time"
@@ -7,10 +7,11 @@ import (
 )
 
 type TransactionType string
+type Transactions []transaction
 
 const (
-	debitTransaction  TransactionType = "debit"
-	creditTransaction TransactionType = "credit"
+	DebitTransaction  TransactionType = "debit"
+	CreditTransaction TransactionType = "credit"
 )
 
 type transaction struct {
@@ -20,7 +21,7 @@ type transaction struct {
 	EffectiveDate time.Time       `json:"effective_date"`
 }
 
-func NewTransaction(operationType TransactionType, amount uint64) *transaction {
+func New(operationType TransactionType, amount uint64) *transaction {
 	return &transaction{
 		Id:            uuid.New().String(),
 		OperationType: operationType,
