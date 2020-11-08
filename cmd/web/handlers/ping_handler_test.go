@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/mastanca/go-api-template/test"
+	"github.com/mastanca/accounting-notebook-be/test"
 	"github.com/stretchr/testify/assert"
 )
 
