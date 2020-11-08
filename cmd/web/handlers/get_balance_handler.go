@@ -22,7 +22,7 @@ func (g getBalanceHandlerImpl) Handle(c *gin.Context) {
 		return
 	}
 	if account == nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "nonexistent account"})
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"reason": "nonexistent account"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"balance": account.GetBalance()})

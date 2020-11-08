@@ -1,27 +1,134 @@
 # Accounting Notebook BE
 
-Template for APIs developed in Go (Golang). Based on concepts from [DDD and Clean Architecture](https://medium.com/@mastanca/clean-architecture-ddd-a-mixed-approach-773ab4623e14).
+## Endpoints
 
-## Dependencies
-* [Gin](https://github.com/gin-gonic/gin)
-* [JWT](https://github.com/dgrijalva/jwt-go)
-* [Testify](https://github.com/stretchr/testify)
+#### `POST` /transactions
 
-## Usage
+Commit a new transactions
 
-Search everywhere in the project for the string ``` github.com/mastanca/accounting-notebook-be ``` and replace with your module.
-Also look out for TODOs everywhere in the template
-
-### Run
-
-```shell script
-make run
+Expected body:
+```json
+{
+  "type": "debit",
+  "amount": 500
+}
 ```
 
-Will start an http server on port 8080 serving a ping under the path ````/api/path````
+Response:
 
-### Test
+Status: 201
+```json
+{
+    "id": "985aa1e7-b9e0-4786-b69a-2825eb26e30b",
+    "type": "debit",
+    "amount": 500,
+    "effective_date": "2020-11-08T16:04:28.219161-03:00"
+}
+```
 
+Status: 409
+```json
+{
+    "reason": "insufficient funds"
+}
+```
+
+#### `GET` /transactions
+
+Get all transactions
+
+Response:
+
+Status: 200
+```json
+[
+    {
+        "id": "985aa1e7-b9e0-4786-b69a-2825eb26e30b",
+        "type": "debit",
+        "amount": 500,
+        "effective_date": "2020-11-08T16:04:28.219161-03:00"
+    }
+]
+```
+
+Status: 404
+```json
+{
+    "reason": "nonexistent account"
+}
+```
+
+#### `GET` /transactions/:id
+
+Get details of the given transaction
+
+Response:
+
+Status: 200
+```json
+{
+    "id": "985aa1e7-b9e0-4786-b69a-2825eb26e30b",
+    "type": "debit",
+    "amount": 500,
+    "effective_date": "2020-11-08T16:04:28.219161-03:00"
+}
+```
+
+Status: 404
+```json
+{
+  "reason": "transaction not found"
+}
+```
+
+#### `GET` /
+
+Get user's balance
+
+Response:
+
+Status: 200
+```json
+{
+  "balance": 500
+}
+```
+
+Status: 404
+```json
+{
+  "reason": "non existent account"
+}
+```
+
+#### `POST` /api/v1/login
+
+Log in with user credentials
+
+Expected body:
+```json
+{
+    "username": "testusername",
+    "password": "pass"
+}
+```
+
+Response:
+
+Status: 200, 400, 401
+```json
+{
+    "token": "token"
+}
+```
+
+## Running
+
+``` shell script
+./run.sh
+```
+
+## Test
 ```shell script
-make test
+go test ./...
 ```
