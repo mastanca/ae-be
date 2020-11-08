@@ -19,11 +19,11 @@ func (g getTransactionByIdHandlerImpl) Handle(c *gin.Context) {
 	id := c.Param("id")
 	fetchedTransaction, err := g.getTransactionById.Execute(c, id)
 	if err != nil {
-		if fetchedTransaction == nil {
-			_ = c.AbortWithError(http.StatusNotFound, err)
-			return
-		}
 		_ = c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+	if fetchedTransaction == nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"reason": "transaction not found"})
 		return
 	}
 	c.JSON(http.StatusOK, fetchedTransaction)
