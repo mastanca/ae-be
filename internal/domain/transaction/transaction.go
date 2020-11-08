@@ -29,3 +29,13 @@ func New(operationType TransactionType, amount float64) Transaction {
 		EffectiveDate: time.Now(),
 	}
 }
+
+func (t Transactions) FindById(id string) *Transaction {
+	var result *Transaction
+	for _, tt := range t {
+		if tt.Id == id {
+			result = &tt
+		}
+	}
+	return result
+}
