@@ -21,7 +21,7 @@ func main() {
 	pingHandler := handlers.NewPingHandlerImpl()
 	getBalanceHandler := handlers.NewGetBalanceHandlerImpl(getAccount)
 	getTransactionsHandler := handlers.NewGetTransactionsHandlerImpl(getAccount)
-	commitTransactionsHandler := handlers.NewGetCommitTransactionHandlerImpl(commitTransaction)
+	commitTransactionsHandler := handlers.NewCommitTransactionHandler(commitTransaction)
 	getTransactionByIdHandler := handlers.NewGetTransactionByIdHandlerImpl(getTransactionById)
 
 	router := gin.Default()
