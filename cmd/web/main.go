@@ -13,10 +13,8 @@ func main() {
 	pingHandler := handlers.NewPingHandlerImpl()
 
 	router := gin.Default()
-	api := router.Group("/api")
-	{
-		api.GET("/ping", pingHandler.Handle)
-	}
+	router.GET("/ping", pingHandler.Handle)
+
 	if err := router.Run(":8080"); err != nil {
 		log.Fatal("error initializing server")
 	}
