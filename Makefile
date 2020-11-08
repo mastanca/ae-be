@@ -3,5 +3,5 @@
 run:
 	@ ./scripts/run.sh
 
-test:
+run-tests:
 	@ ./scripts/test.sh

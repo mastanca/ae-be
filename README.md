@@ -1,10 +1,21 @@
 # Accounting Notebook BE
 
+## Usage
+
+``` shell script
+make run
+```
+
+## Test
+```shell script
+make run-tests
+```
+
 ## Endpoints
 
 #### `POST` /transactions
 
-Commit a new transactions
+Commit a new transaction
 
 Expected body:
 ```json
@@ -99,36 +110,4 @@ Status: 404
 {
   "reason": "non existent account"
 }
-```
-
-#### `POST` /api/v1/login
-
-Log in with user credentials
-
-Expected body:
-```json
-{
-    "username": "testusername",
-    "password": "pass"
-}
-```
-
-Response:
-
-Status: 200, 400, 401
-```json
-{
-    "token": "token"
-}
-```
-
-## Running
-
-``` shell script
-./run.sh
-```
-
-## Test
-```shell script
-go test ./...
 ```
